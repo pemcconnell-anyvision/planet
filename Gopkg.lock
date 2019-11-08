@@ -354,7 +354,7 @@
 
 [[projects]]
   branch = "dmitri/6.1.x/3224-selinux"
-  digest = "1:63ba90027dc21bd0679bda64f117258c8423a7cdbb4d038f3c745a903166321f"
+  digest = "1:9dd1860a32e158f6f368fc1f63256bdfd401aac0c529310ca76e34c3588c963b"
   name = "github.com/gravitational/satellite"
   packages = [
     "agent",
@@ -369,7 +369,7 @@
     "utils",
   ]
   pruneopts = "UT"
-  revision = "d797ae7e8e245464a7f58490b7eaad3bae64bbe5"
+  revision = "cfbf275c6b42fdea386fb30bdcb630e6361f6220"
 
 [[projects]]
   digest = "1:3afdc8c5bad39bda75ede9cd18bf590c385ff9a28c742f7330e3d3e19c685c47"
