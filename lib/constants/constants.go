@@ -79,7 +79,7 @@ const (
 	KubeletConfigFile = "/etc/kubernetes/kubelet.yaml"
 
 	// ContainerRuntimeProcessLabel specifies the SELinux label for the planet process
-	ContainerRuntimeProcessLabel = "system_u:system_r:gravity_container_t:s0"
+	ContainerRuntimeProcessLabel = "system_u:system_r:gravity_container_runtime_t:s0"
 	// ContainerInitProcessLabel specifies the SELinux label for the init process
 	ContainerInitProcessLabel = "system_u:system_r:gravity_container_init_t:s0"
 )
