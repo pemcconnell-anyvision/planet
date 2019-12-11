@@ -46,6 +46,7 @@ import (
 	"github.com/gravitational/trace"
 	"github.com/gravitational/version"
 	"github.com/opencontainers/runc/libcontainer/configs"
+	"github.com/opencontainers/selinux/go-selinux"
 	log "github.com/sirupsen/logrus"
 	logsyslog "github.com/sirupsen/logrus/hooks/syslog"
 	"gopkg.in/alecthomas/kingpin.v2"
@@ -137,6 +138,7 @@ func run() error {
 		cstartKubeletConfig         = cstart.Flag("kubelet-config", "Kubelet configuration as base64-encoded JSON payload").OverrideDefaultFromEnvar(EnvPlanetKubeletConfig).String()
 		cstartCloudConfig           = cstart.Flag("cloud-config", "Cloud configuration as base64-encoded payload").OverrideDefaultFromEnvar(EnvPlanetCloudConfig).String()
 		cstartAllowPrivileged       = cstart.Flag("allow-privileged", "Allow privileged containers").OverrideDefaultFromEnvar(EnvPlanetAllowPrivileged).Bool()
+		cstartSELinux         = cstart.Flag("selinux", "Run with SELinux supoprt").OverrideDefaultFromEnvar(EnvPlanetSELinux).Bool()
 
 		// start the planet agent
 		cagent                 = app.Command("agent", "Start Planet Agent")
@@ -374,6 +376,9 @@ func run() error {
 			err = trace.Errorf("public-ip is not set")
 			break
 		}
+		if *cstartSELinux && !selinux.GetEnabled() {
+			return trace.BadParameter("SELinux supported requested but SELinux is not enabled on host")
+		}
 		rootfs, err = findRootfs()
 		if err != nil {
 			break
@@ -432,6 +437,7 @@ func run() error {
 			KubeletConfig:         *cstartKubeletConfig,
 			CloudConfig:           *cstartCloudConfig,
 			AllowPrivileged:       *cstartAllowPrivileged,
+			SELinux:          *cstartSELinux,
 		}
 		if *cstartSelfTest {
 			err = selfTest(config, *cstartTestKubeRepoPath, *cstartTestSpec, extraArgs)
