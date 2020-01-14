@@ -22,7 +22,9 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"syscall"
 	"unicode"
 
 	"github.com/gravitational/planet/lib/constants"
@@ -110,6 +112,19 @@ func BoolPtr(v bool) *bool {
 // Int32Ptr returns a pointer to an int64 with value v
 func Int32Ptr(v int32) *int32 {
 	return &v
+}
+
+// IsExecFailedError returns true if the specified error
+// represents a failure to execute a command
+func IsExecFailedError(err error) bool {
+	exitErr, ok := err.(*exec.ExitError)
+	if !ok {
+		return false
+	}
+	if waitStatus, ok := exitErr.ProcessState.Sys().(syscall.WaitStatus); ok {
+		return waitStatus.ExitStatus() < 0
+	}
+	return false
 }
 
 // ToJSON converts a single YAML document into a JSON document
